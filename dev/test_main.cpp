@@ -212,7 +212,7 @@ int main(int argc, char* argv[])
 {
 	if (argc != 2)
 	{
-		cerr << "Å×½ºÆ® ÀÌ¸§ÀÌ ÇÊ¿äÇÕ´Ï´Ù.\n";
+		cerr << "í…ŒìŠ¤íŠ¸ ì´ë¦„ì´ í•„ìš”í•©ë‹ˆë‹¤.\n";
 		return 1;
 	}
 
@@ -253,6 +253,6 @@ int main(int argc, char* argv[])
 		}
 	}
 
-	cerr << "¾Ë ¼ö ¾ø´Â Å×½ºÆ®: " << requested_test << '\n';
+	cerr << "ì•Œ ìˆ˜ ì—†ëŠ” í…ŒìŠ¤íŠ¸: " << requested_test << '\n';
 	return 1;
 }

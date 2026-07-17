@@ -37,6 +37,12 @@ target_include_directories(
 
 target_link_libraries(gnss-monitor PRIVATE nmea)
 
+target_compile_definitions(
+    gnss-monitor
+    PRIVATE
+    GNSS_MONITOR_PROJECT_ROOT="${CMAKE_CURRENT_SOURCE_DIR}"
+)
+
 enable_testing()
 
 add_executable(gnss-tests
@@ -76,7 +82,7 @@ foreach(target nmea gnss-monitor gnss-tests)
             PRIVATE
             /W4
             /permissive-
-            /source-charset:.949
+            /source-charset:utf-8
             /execution-charset:.949
         )
     else()
