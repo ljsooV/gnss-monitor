@@ -1,5 +1,6 @@
 #pragma once
 
+#include <optional>
 #include <string>
 
 using namespace std;
@@ -23,8 +24,8 @@ struct rmc_data
 	bool has_fix;
 	double latitude;
 	double longitude;
-	double speed_knots;
-	double course_degrees;
+	optional<double> speed_knots;
+	optional<double> course_degrees;
 	string date;
 };
 

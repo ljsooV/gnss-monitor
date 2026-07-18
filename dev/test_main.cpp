@@ -100,9 +100,23 @@ bool test_rmc_valid()
 		data.status == 'A' &&
 		nearly_equal(data.latitude, 48.1173) &&
 		nearly_equal(data.longitude, 11.5166666667) &&
-		nearly_equal(data.speed_knots, 22.4) &&
-		nearly_equal(data.course_degrees, 84.4) &&
+		data.speed_knots.has_value() &&
+		nearly_equal(*data.speed_knots, 22.4) &&
+		data.course_degrees.has_value() &&
+		nearly_equal(*data.course_degrees, 84.4) &&
 		data.date == "230394";
+}
+
+bool test_rmc_stationary_without_course()
+{
+	rmc_data data{};
+	const bool parsed = parse_rmc(data, "$GPRMC,123519,A,4807.038,N,01131.000,E,0.000,,230394");
+
+	return parsed &&
+		data.has_fix &&
+		data.speed_knots.has_value() &&
+		nearly_equal(*data.speed_knots, 0.0) &&
+		false == data.course_degrees.has_value();
 }
 
 bool test_rmc_no_fix()
@@ -228,6 +242,7 @@ int main(int argc, char* argv[])
 		{"gga_invalid_direction", test_gga_invalid_direction},
 		{"gga_invalid_number", test_gga_invalid_number},
 		{"rmc_valid", test_rmc_valid},
+		{"rmc_stationary_without_course", test_rmc_stationary_without_course},
 		{"rmc_no_fix", test_rmc_no_fix},
 		{"framer_complete_line", test_framer_complete_line},
 		{"framer_lf_line", test_framer_lf_line},

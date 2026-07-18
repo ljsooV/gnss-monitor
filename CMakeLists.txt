@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.24)
 project(gnss-monitor LANGUAGES CXX)
 
 set(DEV_ROOT ${CMAKE_CURRENT_SOURCE_DIR}/dev)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/binary)
 
 add_library(nmea STATIC
     ${DEV_ROOT}/nmea/nmea.cpp
@@ -63,6 +64,7 @@ set(GNSS_TEST_CASES
     gga_invalid_direction
     gga_invalid_number
     rmc_valid
+    rmc_stationary_without_course
     rmc_no_fix
     framer_complete_line
     framer_lf_line

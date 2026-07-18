@@ -153,8 +153,29 @@ bool nmea_processor::process_line(const string& line)
 				<< "[RMC] utc=" << data.utc_time
 				<< ", lat=" << data.latitude
 				<< ", lon=" << data.longitude
-				<< ", speed_knots=" << setprecision(3) << data.speed_knots
-				<< ", course=" << data.course_degrees << '\n';
+				<< ", speed_knots=";
+
+			if (data.speed_knots.has_value())
+			{
+				cout << setprecision(3) << *data.speed_knots;
+			}
+			else
+			{
+				cout << "N/A";
+			}
+
+			cout << ", course=";
+
+			if (data.course_degrees.has_value())
+			{
+				cout << setprecision(3) << *data.course_degrees;
+			}
+			else
+			{
+				cout << "N/A";
+			}
+
+			cout << '\n';
 		}
 
 		return m_writer.write(data);

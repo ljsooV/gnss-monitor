@@ -123,8 +123,6 @@ bool parse_rmc(rmc_data& data, const string& line)
 		(fields[4] != "N" && fields[4] != "S") ||
 		fields[5].empty() ||
 		(fields[6] != "E" && fields[6] != "W") ||
-		fields[7].empty() ||
-		fields[8].empty() ||
 		fields[9].empty())
 	{
 		return false;
@@ -135,8 +133,16 @@ bool parse_rmc(rmc_data& data, const string& line)
 		data.has_fix = true;
 		data.latitude = convert_nmea_to_decimal_degrees(stod(fields[3]), fields[4][0]);
 		data.longitude = convert_nmea_to_decimal_degrees(stod(fields[5]), fields[6][0]);
-		data.speed_knots = stod(fields[7]);
-		data.course_degrees = stod(fields[8]);
+
+		if (false == fields[7].empty())
+		{
+			data.speed_knots = stod(fields[7]);
+		}
+
+		if (false == fields[8].empty())
+		{
+			data.course_degrees = stod(fields[8]);
+		}
 	}
 	catch (const invalid_argument&)
 	{

@@ -5,11 +5,15 @@
 #include "serial_data_source.h"
 
 #include <csignal>
+#include <chrono>
 #include <cstdint>
+#include <ctime>
 #include <filesystem>
+#include <iomanip>
 #include <iostream>
 #include <limits>
 #include <memory>
+#include <sstream>
 #include <stdexcept>
 #include <string>
 
@@ -30,7 +34,22 @@ void handle_stop_signal(int)
 
 filesystem::path make_log_directory(const string& source_type)
 {
-	filesystem::path directory = filesystem::path(GNSS_MONITOR_PROJECT_ROOT) / "logs" / source_type;
+	const auto now = chrono::system_clock::now();
+	const time_t current_time = chrono::system_clock::to_time_t(now);
+	tm local_time{};
+
+	if (0 != localtime_s(&local_time, &current_time))
+	{
+		throw runtime_error("failed to create log timestamp");
+	}
+
+	ostringstream timestamp;
+	timestamp << put_time(&local_time, "%Y%m%d");
+
+	filesystem::path directory = filesystem::path(GNSS_MONITOR_PROJECT_ROOT)
+		/ "logs"
+		/ timestamp.str()
+		/ source_type;
 	directory.make_preferred();
 	return directory;
 }

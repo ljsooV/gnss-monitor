@@ -134,9 +134,21 @@ bool csv_writer::write(const rmc_data& data)
 	{
 		m_rmc_file
 			<< fixed << setprecision(8) << data.latitude << ','
-			<< fixed << setprecision(8) << data.longitude << ','
-			<< fixed << setprecision(3) << data.speed_knots << ','
-			<< fixed << setprecision(3) << data.course_degrees << ',';
+			<< fixed << setprecision(8) << data.longitude << ',';
+
+		if (data.speed_knots.has_value())
+		{
+			m_rmc_file << fixed << setprecision(3) << *data.speed_knots;
+		}
+
+		m_rmc_file << ',';
+
+		if (data.course_degrees.has_value())
+		{
+			m_rmc_file << fixed << setprecision(3) << *data.course_degrees;
+		}
+
+		m_rmc_file << ',';
 	}
 	else
 	{
