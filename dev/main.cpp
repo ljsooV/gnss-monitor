@@ -21,45 +21,43 @@ using namespace std;
 
 namespace
 {
-volatile sig_atomic_t stop_requested = 0;
+	volatile sig_atomic_t stop_requested = 0;
 
-#ifndef GNSS_MONITOR_PROJECT_ROOT
-#define GNSS_MONITOR_PROJECT_ROOT "."
-#endif
-
-void handle_stop_signal(int)
-{
-	stop_requested = 1;
-}
-
-filesystem::path make_log_directory(const string& source_type)
-{
-	const auto now = chrono::system_clock::now();
-	const time_t current_time = chrono::system_clock::to_time_t(now);
-	tm local_time{};
-
-	if (0 != localtime_s(&local_time, &current_time))
+	void handle_stop_signal(int)
 	{
-		throw runtime_error("failed to create log timestamp");
+		stop_requested = 1;
 	}
 
-	ostringstream timestamp;
-	timestamp << put_time(&local_time, "%Y%m%d");
+	filesystem::path make_log_directory(const string& source_type)
+	{
+		const auto now = chrono::system_clock::now();
+		const time_t current_time = chrono::system_clock::to_time_t(now);
+		tm local_time{};
 
-	filesystem::path directory = filesystem::path(GNSS_MONITOR_PROJECT_ROOT)
-		/ "logs"
-		/ timestamp.str()
-		/ source_type;
-	directory.make_preferred();
-	return directory;
-}
+		if (0 != localtime_s(&local_time, &current_time))
+		{
+			throw runtime_error("failed to create log timestamp");
+		}
 
-void print_usage()
-{
-	cerr << "사용법:\n";
-	cerr << "  gnss-monitor.exe serial <COM 포트> <baud rate>\n";
-	cerr << "  gnss-monitor.exe file <NMEA 파일 경로>\n";
-}
+		ostringstream timestamp;
+		timestamp << put_time(&local_time, "%Y%m%d");
+
+		filesystem::path directory = filesystem::path(GNSS_MONITOR_PROJECT_ROOT)
+			/ "logs"
+			/ timestamp.str()
+			/ source_type;
+
+		directory.make_preferred();
+
+		return directory;
+	}
+
+	void print_usage()
+	{
+		cerr << "사용법:\n";
+		cerr << "  gnss-monitor.exe serial <COM 포트> <baud rate>\n";
+		cerr << "  gnss-monitor.exe file <NMEA 파일 경로>\n";
+	}
 }
 
 int main(int argc, char* argv[])
@@ -67,6 +65,7 @@ int main(int argc, char* argv[])
 	if (argc < 2)
 	{
 		print_usage();
+
 		return 1;
 	}
 
@@ -78,6 +77,7 @@ int main(int argc, char* argv[])
 		if (3 != argc)
 		{
 			print_usage();
+
 			return 1;
 		}
 
@@ -86,6 +86,7 @@ int main(int argc, char* argv[])
 		if (false == file_source->open(argv[2]))
 		{
 			cerr << "파일을 열 수 없습니다: " << argv[2] << '\n';
+
 			return 1;
 		}
 
@@ -96,6 +97,7 @@ int main(int argc, char* argv[])
 		if (4 != argc)
 		{
 			print_usage();
+
 			return 1;
 		}
 
@@ -118,6 +120,7 @@ int main(int argc, char* argv[])
 		catch (const exception&)
 		{
 			cerr << "잘못된 baud rate입니다: " << argv[3] << '\n';
+
 			return 1;
 		}
 
@@ -126,15 +129,18 @@ int main(int argc, char* argv[])
 		if (false == serial_source->open(argv[2], baud_rate))
 		{
 			cerr << argv[2] << " 열기 실패\n";
+
 			return 1;
 		}
 
 		cout << argv[2] << " 열기 성공\n";
+
 		source = move(serial_source);
 	}
 	else
 	{
 		print_usage();
+
 		return 1;
 	}
 
@@ -144,13 +150,13 @@ int main(int argc, char* argv[])
 	if (false == writer.open(log_directory))
 	{
 		cerr << "CSV 로그 폴더를 열 수 없습니다: " << log_directory << '\n';
+
 		return 1;
 	}
 
 	cout << "CSV 저장 경로: " << log_directory << '\n';
 
 	signal(SIGINT, handle_stop_signal);
-	signal(SIGTERM, handle_stop_signal);
 
 	nmea_processor processor(writer);
 	const bool succeeded = processor.run(*source, stop_requested);
@@ -161,6 +167,7 @@ int main(int argc, char* argv[])
 	if (false == succeeded)
 	{
 		cerr << "입력 처리 또는 CSV 저장 실패\n";
+
 		return 1;
 	}
 

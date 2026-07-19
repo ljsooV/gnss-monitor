@@ -20,6 +20,7 @@ vector<string> split_fields(const string& line)
 		if (string::npos == end)
 		{
 			fields.push_back(line.substr(begin));
+
 			break;
 		}
 
@@ -67,6 +68,7 @@ bool parse_gga(gga_data& data, const string& line)
 		if (0 == data.fix_quality)
 		{
 			data.has_fix = false;
+
 			return true;
 		}
 
@@ -115,6 +117,7 @@ bool parse_rmc(rmc_data& data, const string& line)
 	if ('V' == data.status)
 	{
 		data.has_fix = false;
+
 		return true;
 	}
 

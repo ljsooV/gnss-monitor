@@ -57,7 +57,7 @@ bool serial_port::configure_port(uint32_t baud_rate)
 	DCB dcb{};
 	dcb.DCBlength = sizeof(DCB);
 
-	if (FALSE == GetCommState(static_cast<HANDLE>(m_handle), &dcb))
+	if (false == GetCommState(static_cast<HANDLE>(m_handle), &dcb))
 	{
 		return false;
 	}
@@ -67,7 +67,7 @@ bool serial_port::configure_port(uint32_t baud_rate)
 	dcb.Parity = NOPARITY;
 	dcb.StopBits = ONESTOPBIT;
 
-	return FALSE != SetCommState(static_cast<HANDLE>(m_handle), &dcb);
+	return SetCommState(static_cast<HANDLE>(m_handle), &dcb);
 }
 
 bool serial_port::configure_timeouts()
@@ -80,10 +80,7 @@ bool serial_port::configure_timeouts()
 	timeouts.WriteTotalTimeoutMultiplier = 0;
 	timeouts.WriteTotalTimeoutConstant = 1000;
 
-	return FALSE != SetCommTimeouts(
-		static_cast<HANDLE>(m_handle),
-		&timeouts
-	);
+	return SetCommTimeouts(static_cast<HANDLE>(m_handle), &timeouts);
 }
 
 bool serial_port::read(char* buffer, uint32_t buffer_size, uint32_t& bytes_read)
@@ -97,7 +94,7 @@ bool serial_port::read(char* buffer, uint32_t buffer_size, uint32_t& bytes_read)
 
 	DWORD received_size = 0;
 
-	if (FALSE == ReadFile(
+	if (false == ReadFile(
 		static_cast<HANDLE>(m_handle),
 		buffer,
 		static_cast<DWORD>(buffer_size),

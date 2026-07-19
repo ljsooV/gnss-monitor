@@ -24,6 +24,7 @@ bool csv_writer::open(const string& output_directory)
 {
 	m_gga_file.close();
 	m_rmc_file.close();
+
 	m_gga_file.clear();
 	m_rmc_file.clear();
 
@@ -59,6 +60,7 @@ bool csv_writer::open(const string& output_directory)
 	{
 		m_gga_file.close();
 		m_rmc_file.close();
+
 		return false;
 	}
 

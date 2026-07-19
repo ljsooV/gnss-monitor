@@ -23,7 +23,7 @@ struct rmc_data
 	char status;
 	bool has_fix;
 	double latitude;
-	double longitude;
+	double longitudec
 	optional<double> speed_knots;
 	optional<double> course_degrees;
 	string date;

@@ -15,9 +15,7 @@ class nmea_processor
 public:
 	explicit nmea_processor(csv_writer& writer);
 
-	bool run(
-		data_source& source,
-		const volatile sig_atomic_t& stop_requested);
+	bool run(data_source& source, const volatile sig_atomic_t& stop_requested);
 
 	size_t gga_count() const;
 	size_t rmc_count() const;

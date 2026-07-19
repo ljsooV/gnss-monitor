@@ -93,6 +93,7 @@ bool nmea_processor::process_line(const string& line)
 	{
 		++m_checksum_error_count;
 		cerr << "[CHECKSUM ERROR] " << line << '\n';
+
 		return true;
 	}
 
@@ -104,6 +105,7 @@ bool nmea_processor::process_line(const string& line)
 		{
 			++m_parse_error_count;
 			cerr << "[GGA PARSE ERROR] " << line << '\n';
+
 			return true;
 		}
 
@@ -137,6 +139,7 @@ bool nmea_processor::process_line(const string& line)
 		{
 			++m_parse_error_count;
 			cerr << "[RMC PARSE ERROR] " << line << '\n';
+
 			return true;
 		}
 
@@ -145,6 +148,7 @@ bool nmea_processor::process_line(const string& line)
 		if (false == data.has_fix)
 		{
 			++m_no_fix_count;
+
 			cout << "[RMC] No Fix, status=" << data.status << '\n';
 		}
 		else
